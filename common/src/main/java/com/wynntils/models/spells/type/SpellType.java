@@ -134,6 +134,10 @@ public enum SpellType {
         return fromSpellDirectionArray(Models.Character.getClassType(), casted);
     }
 
+    public static SpellDirection[] toSpellDirectionArray(int spellNumber) {
+        return SPELL_COMBOS.get(spellNumber - 1);
+    }
+
     public static SpellDirection[] getSpellDirectionArrayFromString(String casted) {
         // Convert e.g. "rlr" into a spell direction array
         SpellDirection[] spellDirections = new SpellDirection[casted.length()];

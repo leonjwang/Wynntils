@@ -216,8 +216,6 @@ public final class SpellModel extends Model {
     }
 
     private void updateFromSpellSegment(SpellInputsSegment spellInputsSegment) {
-        System.out.println("Spell segment updated!");
-
         if (ignoreSpellInputsUntilClear) {
             if (spellInputsSegment.getDirections().length == 0) {
                 ignoreSpellInputsUntilClear = false;
@@ -239,16 +237,11 @@ public final class SpellModel extends Model {
 
         WynntilsMod.postEvent(new SpellEvent.Partial(lastSpell));
 
-        System.out.println("Handling spell completion/non completion!");
-
-        System.out.println("Last spell length: " + lastSpell.length);
         if (lastSpell.length == 3) {
             if (failureReason != null) {
-                System.out.println("Failed: " + failureReason.getDisplayMessage());
                 WynntilsMod.postEvent(new SpellEvent.Failed(failureReason));
                 failureReason = null;
             } else {
-                System.out.println("Completing spell event!");
                 WynntilsMod.postEvent(
                         new SpellEvent.Completed(lastSpell, SpellType.fromSpellDirectionArray(lastSpell)));
             }
@@ -271,7 +264,6 @@ public final class SpellModel extends Model {
     }
 
     private void handleSpellCast(SpellCastSegment spellCastSegment) {
-        System.out.println("Spell cast handled!");
         if (spellTextActive) return;
 
         spellTextActive = true;
