@@ -44,6 +44,7 @@ public final class ShieldModel extends Model {
 
     @SubscribeEvent
     public void onShieldCast(SpellEvent.Completed e) {
+        System.out.println("ShieldModel.onShieldCast");
         for (ShieldType shieldType : shieldTypes) {
             if (shieldType.validSpell(e.getSpell())) {
                 shieldCastTime = System.currentTimeMillis();
@@ -67,21 +68,30 @@ public final class ShieldModel extends Model {
                 Vec3 playerPos = McUtils.player().position();
                 Managers.TickScheduler.scheduleLater(
                         () -> {
+                            System.out.println("Got to scheduler!");
                             if (!isValidSpawn()) return;
+
+                            System.out.println("Valid spawn!");
 
                             // This must be ran with a delay, as inventory contents are set a couple ticks after the
                             // entity spawns.
                             if (!shieldType.verifyShield(shieldAS)) return;
+
+                            System.out.println("Shield verified!");
 
                             // If the player is standing still, the armor stands spawn about 2.1 blocks away
                             // from the player. But if the player moves, it can be up to ~ 4 blocks depending
                             // on walk speed.
                             if (shieldAS.position().distanceTo(playerPos) > SEARCH_RADIUS) return;
 
+                            System.out.println("Shields found!");
+
                             // Save field in local variable to avoid surprises where it is overwritten by null
                             List<Integer> collector = collectedIds;
                             // If we're not collecting shields, do nothing.
                             if (collector == null) return;
+
+                            System.out.println("Shields not null!");
 
                             collector.add(shieldAS.getId());
 
@@ -89,6 +99,8 @@ public final class ShieldModel extends Model {
 
                             // 5 tick total delay to ensure all armor stands have spawned and have their inventory set
                             Managers.TickScheduler.scheduleLater(this::registerShield, 2);
+
+                            System.out.println("Terminated!");
                         },
                         3);
             }
@@ -145,6 +157,9 @@ public final class ShieldModel extends Model {
      * @return true if there was either a valid cast recently, or there is a possibility of an auto cast
      */
     private boolean isValidSpawn() {
+        System.out.println("Last cast diff: ");
+        System.out.println(System.currentTimeMillis() - shieldCastTime < 200);
+        System.out.println("Last cast: " + shieldCastTime);
         return System.currentTimeMillis() - shieldCastTime < 200 || Models.Inventory.hasAutoCasterItem();
     }
 

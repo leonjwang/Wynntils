@@ -39,6 +39,8 @@ public class SpellInputsSegmentMatcher implements ActionBarSegmentMatcher {
 
     @Override
     public ActionBarSegment parse(StyledText actionBar) {
+        System.out.println("Parsing action bar!");
+
         String actionBarString = actionBar.getStringWithoutFormatting();
         Matcher matcher = SPELL_REGEX.matcher(actionBarString);
         if (!matcher.find()) return null;
